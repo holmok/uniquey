@@ -34,8 +34,8 @@ function validateAndDefaultOptions(options) {
         allocate: (_c = options.allocate) !== null && _c !== void 0 ? _c : 256
     };
 }
-var Uniquee = (function () {
-    function Uniquee(options) {
+var Uniquey = (function () {
+    function Uniquey(options) {
         if (options === void 0) { options = {}; }
         var validOptions = validateAndDefaultOptions(options);
         this.length = validOptions.length;
@@ -45,14 +45,14 @@ var Uniquee = (function () {
         this.pointer = this.pool.length;
         this.numberOfCharacters = this.characters.length;
     }
-    Uniquee.prototype.random = function () {
+    Uniquey.prototype.random = function () {
         if (this.pointer > this.pool.length - this.length) {
             crypto_1.default.randomFillSync(this.pool);
             this.pointer = 0;
         }
         return this.pool.slice(this.pointer, (this.pointer += this.length));
     };
-    Uniquee.prototype.create = function () {
+    Uniquey.prototype.create = function () {
         var _this = this;
         var indexer = this.random().map(function (x) { return x % _this.numberOfCharacters; }).values();
         var output = '';
@@ -61,6 +61,6 @@ var Uniquee = (function () {
         }
         return output;
     };
-    return Uniquee;
+    return Uniquey;
 }());
-exports.default = Uniquee;
+exports.default = Uniquey;

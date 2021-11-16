@@ -1,9 +1,9 @@
 import Crypto from 'crypto'
 
 /**
- * Options to create an instance of Uniquee
+ * Options to create an instance of Uniquey
  */
-export interface UniqueeOptions {
+export interface UniqueyOptions {
   /**
    * Length of the unique string to generate
    * default: 8
@@ -28,7 +28,7 @@ interface ValidOptions {
 }
 
 // Validate the options and set defaults
-function validateAndDefaultOptions (options: UniqueeOptions): ValidOptions {
+function validateAndDefaultOptions (options: UniqueyOptions): ValidOptions {
   const { length, characters, allocate } = options
 
   // length must be greater than 0
@@ -70,7 +70,7 @@ function validateAndDefaultOptions (options: UniqueeOptions): ValidOptions {
 /**
  * Generate a unique string
  */
-export default class Uniquee {
+export default class Uniquey {
   private readonly length: number
   private readonly characters: string[]
   private readonly allocate: number
@@ -79,10 +79,10 @@ export default class Uniquee {
   private readonly numberOfCharacters: number
 
   /**
-   * Creates an instance of Uniquee.
-   * @param options {UniqueeOptions} options to create the unique key.
+   * Creates an instance of Uniquey.
+   * @param options {UniqueyOptions} options to create the unique key.
    */
-  constructor (options: UniqueeOptions = {}) {
+  constructor (options: UniqueyOptions = {}) {
     const validOptions = validateAndDefaultOptions(options)
     this.length = validOptions.length
     this.characters = validOptions.characters.split('')
@@ -102,7 +102,7 @@ export default class Uniquee {
 
   /**
    * Create a unique key.
-   * @returns {string} random string based on the options passed to Uniquee.
+   * @returns {string} random string based on the options passed to Uniquey.
    */
   create (): string {
     const indexer = this.random().map(x => x % this.numberOfCharacters).values()

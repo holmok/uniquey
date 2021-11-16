@@ -1,6 +1,6 @@
-# Uniquee
+# Uniquey
 
-Uniquee _(you-KNEE-key)_ is a node library that generates random unique strings __(or keys)__.
+Uniquey _(you-KNEE-key)_ is a node library that generates random unique strings __(or keys)__.
 
 ## Why?
 Yeah, there are UUIDs, and we mostly use v4 (random) ones. But we usually store these 128bit keys as TEXT in a database, which is 32 characters which are larger than 128 bits. So rather than hex, why not base62 (A-Za-z0-9) or even any alphabet? How about always eight characters? A Base62 alphabet and eight characters will give you a total of 2.18*10^14 unique keys, pretty good.
@@ -21,21 +21,21 @@ Yes, and it depends.  On my M1 MacBook Air, I can generate 10,000 keys in less t
 
 __Install it with__
 
-```yarn add uniquee``` 
+```yarn add uniquey``` 
 
 or 
 
-```npm i uniquee```
+```npm i uniquey```
 
 __Sample code:__
 
 ```javascript
-import Uniqee from 'uniquee' 
-// or const Uniqee = require('uniquee').default
+import Uniqee from 'uniquey' 
+// or const Uniqee = require('uniquey').default
 
-const uniquee = new Uniquee()
+const uniquey = new Uniquey()
 
-console.log(uniquee.create())
+console.log(uniquey.create())
 
 // outputs random string like `HqiId0Sj`
 ```
@@ -44,7 +44,7 @@ console.log(uniquee.create())
 
 ## Options
 
-You can create a __Uniquee__ instance with the following optional options:
+You can create a __Uniquey__ instance with the following optional options:
 
 * `length` [number]: _(default: 8)_ the length of string to create. Must be greater than 0 and less than `allocation`.
 * `characters` [string]: _(default: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')_ the characters to use in the random output.  Must be at least 2 characters and no more than 256 and not have any duplicates.
@@ -52,12 +52,12 @@ You can create a __Uniquee__ instance with the following optional options:
 
 __Example using options:__
 ```javascript
-import Uniqee from 'uniquee'
-// or const Uniqee = require('uniquee').default
+import Uniquey from 'uniquey'
+// or const Uniquey = require('uniquey').default
 
-const uniquee = new Uniquee({length: 4, characters: '🐈🐕🐎', allocate: 4000})
+const uniquey = new Uniquey({length: 4, characters: '🐈🐕🐎', allocate: 4000})
 
-console.log(uniquee.create())
+console.log(uniquey.create())
 
 // outputs random string like `🐎🐈🐎🐕` 
 // not very random but fun!

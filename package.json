@@ -1,5 +1,5 @@
 {
-  "name": "uniquee",
+  "name": "uniquey",
   "private": false,
   "version": "1.0.0",
   "main": "dist/index.js",
@@ -13,12 +13,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/holmok/uniquee.git"
+    "url": "https://github.com/holmok/uniquey.git"
   },
   "bugs": {
-    "url": "https://github.com/holmok/uniquee/issues"
+    "url": "https://github.com/holmok/uniquey/issues"
   },
-  "homepage": "https://github.com/holmok/uniquee#readme",
+  "homepage": "https://github.com/holmok/uniquey#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^16.11.6",
