@@ -1,0 +1,48 @@
+{
+  "name": "uniquee",
+  "private": false,
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "license": "MIT",
+  "keywords": [
+    "random",
+    "string",
+    "unique",
+    "keys"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holmok/uniquee.git"
+  },
+  "bugs": {
+    "url": "https://github.com/holmok/uniquee/issues"
+  },
+  "homepage": "https://github.com/holmok/uniquee#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "@types/sinon": "^10.0.6",
+    "@types/tape": "^4.13.2",
+    "@typescript-eslint/parser": "^4.0.0",
+    "eslint": "^7.0.0",
+    "nyc": "^15.1.0",
+    "sinon": "^12.0.1",
+    "tap-spec": "^5.0.0",
+    "tape": "^5.3.1",
+    "ts-node": "^10.4.0",
+    "ts-standard": "^10.0.0",
+    "typescript": "^4.4.4"
+  },
+  "scripts": {
+    "lint": "ts-standard src",
+    "test": "yarn lint && yarn nyc",
+    "tape": "tape --jobs=4 --require ts-node/register ./tests/**/*.test.ts | tap-spec",
+    "nyc": "nyc --reporter=text --reporter=text-summary --reporter=html yarn run tape",
+    "postnyc": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
+    "compile": "tsc",
+    "clean": "rm -rf dist",
+    "build": "yarn test && yarn clean && yarn compile",
+    "start": "ts-node src/index.ts | pino-tiny"
+  }
+}
