@@ -12,6 +12,9 @@ Yes, but you can make it less possible by adjusting the length to 22, and you wi
 
 Yeah, there are a bunch of less than good ways to generate random stuff in node/javascript. The base of this library uses `Crypto.randomFillSync` to allocate a bunch of random bytes.  This process is similar to how the `UUID` library generates v4 UUIDs.
 
+## Is it blocking? Is it fast?
+Yes, and it depends.  On my M1 MacBook Air, I can generate 10,000 keys in less than 300ms.  That seems fast, and was with the default settings.  Your performance may be different.
+
 ------
 
 ## How to Use
