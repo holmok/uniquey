@@ -30,6 +30,18 @@ Tape('default', (t) => {
   post(context)
 })
 
+Tape('multi-byte allowed', (t) => {
+  t.plan(3)
+  const context = pre()
+  context.mocks?.crypto?.expects('randomFillSync')?.once()?.callsFake((x: Uint8Array): Uint8Array => { x = Uint8Array.from(Array(256)); return x })
+  const uniquey = new Uniquey({ characters: '🏤asdf🏢🏣', length: 4, allocate: 123, multiByteCharacters: true })
+  const result = uniquey.create()
+  t.equal(result.length, 8, 'should return 4 multi-byte characters for a total of 8')
+  t.equal(result, '🏤🏤🏤🏤', 'should return 4 z\'s')
+  t.pass('success')
+  post(context)
+})
+
 Tape('good options', (t) => {
   t.plan(3)
   const context = pre()
@@ -65,7 +77,12 @@ Tape('do not re-allocate', (t) => {
 })
 
 Tape('bad options in constructor', (t) => {
-  t.plan(8)
+  t.plan(9)
+
+  t.throws(() => {
+    const uniquey = new Uniquey({ characters: '🏤asdf🏢🏣' })
+    t.fail(`should not create instance of ${typeof uniquey}`)
+  }, 'no multi-byte characters unless explicitly allowed')
 
   t.throws(() => {
     const uniquey = new Uniquey({ length: 0 })

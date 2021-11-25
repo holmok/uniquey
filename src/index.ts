@@ -19,17 +19,42 @@ export interface UniqueyOptions {
    * default: 256
    */
   allocate?: number
+
+  /**
+   * support multi-byte characters?
+   */
+  multiByteCharacters?: boolean
 }
 
 interface ValidOptions {
   length: number
-  characters: string
+  characters: string[]
   allocate: number
+}
+
+function isMultiByte (characters: string): boolean {
+  return /[\uD800-\uDFFF]/.test(characters)
+}
+function splitMultiByte (characters: string): string[] {
+  // first split with multi-byte characters
+  const splitMulti = characters.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/).filter((i) => (i != null) && (i.length > 1))
+  const output: string[] = []
+  // split the other chunks
+  splitMulti.forEach((i) => {
+    if (isMultiByte(i)) {
+      output.push(i)
+    } else {
+      output.push(...i.split(''))
+    }
+  })
+  return output
 }
 
 // Validate the options and set defaults
 function validateAndDefaultOptions (options: UniqueyOptions): ValidOptions {
-  const { length, characters, allocate } = options
+  const { length, characters, allocate, multiByteCharacters } = options
+  const chars = splitMultiByte(characters ?? '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+  const multiByte = multiByteCharacters ?? false
 
   // length must be greater than 0
   if (length != null && length < 1) {
@@ -47,22 +72,26 @@ function validateAndDefaultOptions (options: UniqueyOptions): ValidOptions {
   }
 
   // characters need to have at least two characters and have unique characters and be less than 256 characters
-  if (characters != null) {
-    if (characters.length < 2) {
-      throw new Error('Characters option must be at least 2 character long')
-    }
-    if (characters.length > 256) {
-      throw new Error('Characters option must be less than 256 characters')
-    }
-    const charSet = new Set(characters.split(''))
-    if (charSet.size !== characters.length) {
-      throw new Error('Characters option must have unique characters')
-    }
+
+  if (chars.length < 2) {
+    throw new Error('Characters option must be at least 2 character long')
+  }
+  if (chars.length > 256) {
+    throw new Error('Characters option must be less than 256 characters')
+  }
+
+  if (!multiByte && isMultiByte(chars.join(''))) {
+    throw new Error('Characters option must not contain multi-byte characters')
+  }
+
+  const charSet = new Set(chars)
+  if (charSet.size !== chars.length) {
+    throw new Error('Characters option must have unique characters')
   }
 
   return {
     length: options.length ?? 8,
-    characters: options.characters ?? '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    characters: chars,
     allocate: options.allocate ?? 256
   }
 }
@@ -85,7 +114,7 @@ export default class Uniquey {
   constructor (options: UniqueyOptions = {}) {
     const validOptions = validateAndDefaultOptions(options)
     this.length = validOptions.length
-    this.characters = validOptions.characters.split('')
+    this.characters = validOptions.characters
     this.allocate = validOptions.allocate
     this.pool = new Uint8Array(this.allocate)
     this.pointer = this.pool.length
