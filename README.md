@@ -15,6 +15,9 @@ Yeah, there are a bunch of less than good ways to generate random stuff in node/
 ## Is it blocking? Is it fast?
 Yes, and it depends.  On my M1 MacBook Air, I can generate 1,000,000 keys in less than 300ms.  That seems fast, and was with the default settings.  Your performance may be different.
 
+## Multi-Byte Characters?
+Ugh, well this was fixed in version 1.1, sorry.  So a multi-byte character (like 🏢) will be split as a whole character as it's self and not each byte.  Support for multi-byte characters needs to be turned on explicitly with the `multiByteCharacters` option in the constructor.
+
 ------
 
 ## How to Use
@@ -49,18 +52,23 @@ You can create a __Uniquey__ instance with the following optional options:
 * `length` [number]: _(default: 8)_ the length of string to create. Must be greater than 0 and less than `allocation`.
 * `characters` [string]: _(default: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')_ the characters to use in the random output.  Must be at least 2 characters and no more than 256 and not have any duplicates.
 * `allocate` [number]: _(default: 256)_ number of random bytes to allocate. This allocation helps with performance.  Must be greater than `length` and greater than 0.
+* `multiByteCharacters` [boolean]: _(default: false)_ allow multi-byte characters, if true they will be allowed, if not the creation will throw an error if `characters` contains multi-byte characters.
 
 __Example using options:__
 ```javascript
 import Uniquey from 'uniquey'
 // or const Uniquey = require('uniquey').default
 
-const uniquey = new Uniquey({length: 4, characters: '🐈🐕🐎', allocate: 4000})
+const uniquey = new Uniquey({length: 4, characters: '🐈🏢🐕🐎', allocate: 4000, multiByteCharacters: true})
 
 console.log(uniquey.create())
 
-// outputs random string like `🐎🐈🐎🐕` 
+// outputs random string like `🐎🐈🏢🐕` 
 // not very random but fun!
 // also this will allocate new random bytes 
 // after generating 1000 random keys (4000/4)
 ```
+
+## New in Version 1.1.0
+
+Better handling of multi-byte characters.
