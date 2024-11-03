@@ -1,9 +1,10 @@
 {
   "name": "uniquey",
   "private": false,
-  "version": "1.1.1",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "type": "module",
   "license": "MIT",
   "keywords": [
     "random",
@@ -21,27 +22,30 @@
   "homepage": "https://github.com/holmok/uniquey#readme",
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^16.11.6",
-    "@types/sinon": "^10.0.6",
-    "@types/tape": "^4.13.2",
-    "@typescript-eslint/parser": "^4.0.0",
-    "eslint": "^7.0.0",
-    "nyc": "^15.1.0",
-    "sinon": "^12.0.1",
+    "@types/node": "^22.8.7",
+    "@types/sinon": "^17.0.3",
+    "@types/tape": "^5.6.4",
+    "eslint": "^9.14.0",
+    "eslint-config-love": "^97.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "nyc": "^17.1.0",
+    "prettier": "^3.3.3",
+    "sinon": "^19.0.2",
     "tap-spec": "^5.0.0",
     "tape": "^5.3.1",
     "ts-node": "^10.4.0",
-    "ts-standard": "^10.0.0",
-    "typescript": "^4.4.4"
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   },
   "scripts": {
-    "lint": "ts-standard src",
+    "lint": "eslint .",
     "test": "yarn lint && yarn nyc",
-    "tape": "tape --jobs=4 --require ts-node/register ./tests/**/*.test.ts | tap-spec",
+    "tape": "tsx node_modules/tape/bin/tape --jobs=4 ./tests/**/*.test.ts | tap-spec",
     "nyc": "nyc --reporter=text --reporter=text-summary --reporter=html yarn run tape",
     "postnyc": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "compile": "tsc",
     "clean": "rm -rf dist",
+    "format": "prettier --write .",
     "build": "yarn test && yarn clean && yarn compile",
     "start": "ts-node src/index.ts | pino-tiny"
   }

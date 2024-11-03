@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/prefer-destructuring -- annoying */
+/* eslint-disable @typescript-eslint/no-magic-numbers -- annoying */
+
 import Crypto from 'crypto'
 
 /**
@@ -32,12 +35,14 @@ interface ValidOptions {
   allocate: number
 }
 
-function isMultiByte (characters: string): boolean {
+function isMultiByte(characters: string): boolean {
   return /[\uD800-\uDFFF]/.test(characters)
 }
-function splitMultiByte (characters: string): string[] {
+function splitMultiByte(characters: string): string[] {
   // first split with multi-byte characters
-  const splitMulti = characters.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/).filter((i) => (i != null) && (i.length > 1))
+  const splitMulti = characters
+    .split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/)
+    .filter((i) => i.length > 1)
   const output: string[] = []
   // split the other chunks
   splitMulti.forEach((i) => {
@@ -51,9 +56,12 @@ function splitMultiByte (characters: string): string[] {
 }
 
 // Validate the options and set defaults
-function validateAndDefaultOptions (options: UniqueyOptions): ValidOptions {
+function validateAndDefaultOptions(options: UniqueyOptions): ValidOptions {
   const { length, characters, allocate, multiByteCharacters } = options
-  const chars = splitMultiByte(characters ?? '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+  const chars = splitMultiByte(
+    characters ??
+      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  )
   const multiByte = multiByteCharacters ?? false
 
   // length must be greater than 0
@@ -68,7 +76,9 @@ function validateAndDefaultOptions (options: UniqueyOptions): ValidOptions {
 
   // length must be less than or equal to allocate
   if (allocate != null && length != null && length > allocate) {
-    throw new Error('Length option must be less than or equal to allocate option')
+    throw new Error(
+      'Length option must be less than or equal to allocate option'
+    )
   }
 
   // characters need to have at least two characters and have unique characters and be less than 256 characters
@@ -111,17 +121,17 @@ export default class Uniquey {
    * Creates an instance of Uniquey.
    * @param options {UniqueyOptions} options to create the unique key.
    */
-  constructor (options: UniqueyOptions = {}) {
-    const validOptions = validateAndDefaultOptions(options)
-    this.length = validOptions.length
-    this.characters = validOptions.characters
-    this.allocate = validOptions.allocate
+  constructor(options: UniqueyOptions = {}) {
+    const { length, characters, allocate } = validateAndDefaultOptions(options)
+    this.length = length
+    this.characters = characters
+    this.allocate = allocate
     this.pool = new Uint8Array(this.allocate)
     this.pointer = this.pool.length
     this.numberOfCharacters = this.characters.length
   }
 
-  private random (): Uint8Array {
+  private random(): Uint8Array {
     if (this.pointer > this.pool.length - this.length) {
       Crypto.randomFillSync(this.pool)
       this.pointer = 0
@@ -133,11 +143,13 @@ export default class Uniquey {
    * Create a unique key.
    * @returns {string} random string based on the options passed to Uniquey.
    */
-  create (): string {
-    const indexer = this.random().map(x => x % this.numberOfCharacters).values()
+  create(): string {
+    const indexer = this.random()
+      .map((x) => x % this.numberOfCharacters)
+      .values()
     let output = ''
     for (let i = indexer.next().value; i != null; i = indexer.next().value) {
-      output = `${output}${this.characters[i] as string}`
+      output = `${output}${this.characters[i]}`
     }
     return output
   }
